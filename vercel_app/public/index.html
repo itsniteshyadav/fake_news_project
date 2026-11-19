@@ -1,0 +1,1983 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>NewsX — See Beyond the Headlines</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Playfair+Display:ital,wght@0,700;0,800;0,900;1,700;1,800;1,900&display=swap" rel="stylesheet">
+  <style>
+    /* ==========================================================================
+       NewsX — PYXON Dark Design System
+       ========================================================================== */
+    :root {
+      --bg-main: #F4F6FA;
+      --bg-secondary: #EAEFF8;
+      --bg-card: #FFFFFF;
+      --bg-card-hover: #EEF3FC;
+      --primary-blue: #123B7A;
+      --gradient-blue: #1D5FAD;
+      --light-blue: #2D7DD2;
+      --text-primary: #0B1D3A;
+      --text-secondary: #3D5478;
+      --text-dim: #64748B;
+      --border-color: #C8D5E8;
+      --border-focus: #1D5FAD;
+      --success-green: #15803D;
+      --success-bg: rgba(21, 128, 61, 0.08);
+      --success-border: rgba(21, 128, 61, 0.25);
+      --error-red: #DC2626;
+      --error-bg: rgba(220, 38, 38, 0.07);
+      --error-border: rgba(220, 38, 38, 0.25);
+      --glow-blue: rgba(18, 59, 122, 0.20);
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 18px;
+      --radius-xl: 24px;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background-color: #F4F6FA;
+      background-image: radial-gradient(ellipse 70% 60% at 70% 30%, #E0E9F7 0%, #EBF0FA 50%, #F4F6FA 100%);
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      color: var(--text-primary);
+      font-family: 'Inter', 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+      letter-spacing: -0.015em;
+    }
+
+    /* Ambient lighting & mesh gradients */
+    .ambient-bg {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+    .orb-1 {
+      position: absolute;
+      top: -150px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 900px;
+      height: 600px;
+      background: radial-gradient(ellipse at center, rgba(18, 59, 122, 0.08) 0%, rgba(29, 95, 173, 0.04) 45%, transparent 75%);
+      filter: blur(80px);
+    }
+    .orb-2 {
+      position: absolute;
+      top: 600px;
+      right: -100px;
+      width: 550px;
+      height: 550px;
+      background: radial-gradient(circle, rgba(29, 95, 173, 0.06) 0%, transparent 65%);
+      filter: blur(80px);
+    }
+
+    /* ==========================================================================
+       Navigation Bar — Exact PYXON style: dark, transparent
+       ========================================================================== */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(244, 246, 250, 0.92);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(200, 213, 232, 0.8);
+      animation: headerSlideDown 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+    @keyframes headerSlideDown {
+      from { opacity: 0; transform: translateY(-16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .nav-container {
+      max-width: 1380px;
+      margin: 0 auto;
+      padding: 20px 44px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 36px;
+    }
+
+    /* Logo */
+    .logo-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    .logo-text {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-weight: 900;
+      font-style: italic;
+      font-size: 1.65rem;
+      letter-spacing: 0.04em;
+      color: #0B1D3A;
+      text-transform: uppercase;
+    }
+
+    /* Nav tabs */
+    nav.nav-tabs {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+    }
+    .tab-btn {
+      background: transparent;
+      border: none;
+      color: rgba(11, 29, 58, 0.55);
+      padding: 6px 0;
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: color 0.2s ease;
+      font-family: inherit;
+      position: relative;
+      white-space: nowrap;
+      letter-spacing: -0.01em;
+    }
+    .tab-btn:hover {
+      color: #0B1D3A;
+    }
+    .tab-btn.active {
+      color: #0B1D3A;
+      font-weight: 600;
+    }
+    .tab-btn.active::after {
+      content: "";
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: linear-gradient(90deg, #0F2D6B, #1D5FAD);
+      border-radius: 2px;
+    }
+
+    /* Contact Us pill — PYXON exact blue pill */
+    .btn-nav-contact {
+      font-family: inherit;
+      font-size: 0.88rem;
+      font-weight: 600;
+      padding: 9px 22px;
+      border-radius: 99px;
+      cursor: pointer;
+      background: #2D7DD2;
+      color: #FFFFFF;
+      border: none;
+      box-shadow: 0 4px 16px rgba(45, 125, 210, 0.35);
+      transition: all 0.22s ease;
+      white-space: nowrap;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      letter-spacing: -0.01em;
+    }
+    .btn-nav-contact:hover {
+      background: #2468B5;
+      transform: translateY(-1px);
+      box-shadow: 0 6px 22px rgba(45, 125, 210, 0.50);
+    }
+
+    @media (max-width: 880px) {
+      .nav-container { flex-wrap: wrap; gap: 14px; justify-content: center; padding: 16px 24px; }
+      nav.nav-tabs { gap: 18px; }
+    }
+
+    /* ==========================================================================
+       Main Layout
+       ========================================================================== */
+    main {
+      flex: 1;
+      max-width: 1380px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 0 44px 80px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .tab-pane { display: none; }
+    .tab-pane.active { display: block; }
+
+    /* ==========================================================================
+       HOME — Exact PYXON Two-Column Hero with Glowing Eye
+       ========================================================================== */
+    #pane-home {
+      width: 100%;
+      position: relative;
+    }
+
+    .hero-two-column-wrapper {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      gap: 48px;
+      min-height: 82vh;
+      padding: 60px 0 60px;
+    }
+
+    .hero-col-left {
+      max-width: 580px;
+    }
+
+    /* Eyebrow — exact PYXON pill */
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(18, 59, 122, 0.08);
+      border: 1px solid rgba(29, 95, 173, 0.22);
+      padding: 5px 15px;
+      border-radius: 99px;
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.10em;
+      text-transform: uppercase;
+      color: #1D5FAD;
+      margin-bottom: 28px;
+    }
+    .eyebrow-symbol {
+      font-size: 0.75rem;
+      color: #1D5FAD;
+      font-weight: 700;
+    }
+
+    /* Hero headline — PYXON exact weight/size/spacing */
+    .hero-title {
+      font-size: clamp(2.6rem, 4.2vw, 3.8rem);
+      font-weight: 800;
+      line-height: 1.10;
+      letter-spacing: -0.035em;
+      color: #0B1D3A;
+      margin-bottom: 24px;
+    }
+    .hero-title .gradient-text {
+      display: inline;
+      background: linear-gradient(135deg, #93C5FD 0%, #2D7DD2 55%, #1D5FAD 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      filter: drop-shadow(0 0 24px rgba(18, 59, 122, 0.6));
+    }
+
+    /* Description — PYXON subdued slate */
+    .hero-description {
+      font-size: 1.0rem;
+      color: #3D5478;
+      line-height: 1.72;
+      max-width: 440px;
+      margin-bottom: 36px;
+      letter-spacing: -0.005em;
+    }
+
+    /* Button row — PYXON two-button layout */
+    .hero-buttons-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    /* Primary filled blue pill */
+    .btn-primary-action {
+      font-family: inherit;
+      font-size: 0.95rem;
+      font-weight: 600;
+      padding: 13px 28px;
+      border-radius: 99px;
+      cursor: pointer;
+      background: #2D7DD2;
+      color: #FFFFFF;
+      border: none;
+      box-shadow: 0 4px 22px rgba(45, 125, 210, 0.40);
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      transition: all 0.25s ease;
+      text-decoration: none;
+      letter-spacing: -0.01em;
+    }
+    .btn-primary-action:hover {
+      background: #2468B5;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 28px rgba(45, 125, 210, 0.55);
+    }
+    .btn-primary-action svg { transition: transform 0.2s ease; }
+    .btn-primary-action:hover svg { transform: translateX(4px); }
+
+    /* Secondary ghost pill */
+    .btn-secondary-action {
+      font-family: inherit;
+      font-size: 0.95rem;
+      font-weight: 500;
+      padding: 13px 26px;
+      border-radius: 99px;
+      cursor: pointer;
+      background: transparent;
+      color: #0B1D3A;
+      border: 1px solid rgba(11, 29, 58, 0.25);
+      transition: all 0.25s ease;
+      text-decoration: none;
+      letter-spacing: -0.01em;
+    }
+    .btn-secondary-action:hover {
+      border-color: rgba(11, 29, 58, 0.5);
+      background: rgba(11, 29, 58, 0.06);
+      transform: translateY(-2px);
+    }
+
+    /* ==========================================================================
+       Right Column: Glowing Blue Eye (PYXON exact)
+       ========================================================================== */
+    .hero-col-right {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+    }
+    .eye-illustration-container {
+      position: relative;
+      width: 500px;
+      height: 500px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .newsx-eye-svg {
+      width: 500px;
+      height: 500px;
+      overflow: visible;
+    }
+    .eye-ambient-glow {
+      position: absolute;
+      width: 420px;
+      height: 420px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(18, 59, 122, 0.22) 0%, rgba(15, 46, 107, 0.10) 40%, rgba(244, 246, 250, 0) 70%);
+      filter: blur(60px);
+      animation: eyeGlowBreath 6s ease-in-out infinite alternate;
+      pointer-events: none;
+    }
+    @keyframes eyeGlowBreath {
+      0%   { transform: scale(0.90); opacity: 0.70; }
+      100% { transform: scale(1.10); opacity: 1; }
+    }
+    .eye-iris-group {
+      transform-origin: 250px 250px;
+      animation: eyeIrisBreathe 6s ease-in-out infinite alternate;
+    }
+    @keyframes eyeIrisBreathe {
+      0%   { transform: scale(0.97); }
+      100% { transform: scale(1.03); }
+    }
+    .eye-orbit-group {
+      transform-origin: 250px 250px;
+      animation: spinClockwise 90s linear infinite;
+    }
+    @keyframes spinClockwise {
+      to { transform: rotate(360deg); }
+    }
+    .eye-particles circle {
+      animation: eyeParticleTwinkle 4s ease-in-out infinite alternate;
+    }
+    .eye-particles circle:nth-child(2n) { animation-delay: 1.5s; }
+    .eye-particles circle:nth-child(3n) { animation-delay: 2.8s; }
+    @keyframes eyeParticleTwinkle {
+      0%   { opacity: 0.3; transform: translateY(0); }
+      100% { opacity: 1;   transform: translateY(-4px); }
+    }
+
+    /* Hero Feature Cards (below headline on left col) */
+    .landing-features-grid {
+      position: relative;
+      z-index: 5;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      width: 100%;
+      margin-top: 52px;
+    }
+    .landing-feat-card {
+      background: rgba(8, 22, 48, 0.70);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 22px;
+      text-align: left;
+      backdrop-filter: blur(14px);
+      transition: all 0.25s ease;
+    }
+    .landing-feat-card:hover {
+      background: var(--bg-card-hover);
+      border-color: rgba(96, 165, 250, 0.4);
+      transform: translateY(-3px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    }
+    .feat-icon-badge {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: rgba(37, 99, 235, 0.14);
+      border: 1px solid rgba(59, 130, 246, 0.28);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--light-blue);
+      margin-bottom: 12px;
+    }
+    .feat-title {
+      font-size: 1.0rem;
+      font-weight: 700;
+      margin-bottom: 5px;
+      color: var(--text-primary);
+      letter-spacing: -0.015em;
+    }
+    .feat-desc {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      line-height: 1.55;
+    }
+
+    /* Entrance animations */
+    .anim-reveal-1 { animation: revealDown 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.15s both; }
+    .anim-reveal-2 { animation: revealUp  0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.30s both; }
+    .anim-reveal-3 { animation: revealUp  0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.45s both; }
+    .anim-reveal-4 { animation: revealScale 0.95s cubic-bezier(0.16, 1, 0.3, 1) 0.60s both; }
+
+    @keyframes revealDown {
+      from { opacity: 0; transform: translateY(-24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes revealUp {
+      from { opacity: 0; transform: translateY(32px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes revealScale {
+      from { opacity: 0; transform: translateY(28px) scale(0.92); }
+      to   { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    @media (max-width: 1040px) {
+      .hero-two-column-wrapper {
+        grid-template-columns: 1fr;
+        text-align: center;
+        gap: 50px;
+        padding: 40px 0;
+        min-height: auto;
+      }
+      .hero-col-left { max-width: 100%; }
+      .hero-title { text-align: center; }
+      .hero-description { margin-left: auto; margin-right: auto; text-align: center; }
+      .hero-buttons-row { justify-content: center; }
+      .eye-illustration-container { width: 380px; height: 380px; }
+      .newsx-eye-svg { width: 380px; height: 380px; }
+    }
+    @media (max-width: 680px) {
+      main { padding: 0 24px 60px; }
+      .eye-illustration-container { width: 300px; height: 300px; }
+      .newsx-eye-svg { width: 300px; height: 300px; }
+      .landing-features-grid { grid-template-columns: 1fr; }
+    }
+
+    /* ==========================================================================
+       DETECT PAGE — Dark theme, centered card
+       ========================================================================== */
+    #pane-detect {
+      padding-top: 52px;
+    }
+
+    .detect-wrapper {
+      max-width: 740px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* Back button */
+    .back-btn {
+      align-self: flex-start;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-color);
+      color: var(--text-secondary);
+      padding: 8px 18px;
+      border-radius: 8px;
+      font-size: 0.84rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      transition: all 0.2s ease;
+      font-family: inherit;
+      margin-bottom: 28px;
+    }
+    .back-btn:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: var(--light-blue);
+      color: var(--text-primary);
+    }
+
+    /* Detection card */
+    .detect-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-xl);
+      padding: 44px 48px 40px;
+      width: 100%;
+      box-shadow: 0 16px 48px rgba(0, 0, 0, 0.5), 0 0 32px rgba(37, 99, 235, 0.07);
+      position: relative;
+      overflow: hidden;
+      animation: fadeIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+    .detect-card::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--gradient-blue), var(--light-blue), transparent);
+    }
+
+    /* Icon at top */
+    .detect-top-icon {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 20px;
+      color: var(--light-blue);
+    }
+    .detect-top-icon svg { width: 52px; height: 52px; }
+
+    /* Heading & description */
+    .detect-heading {
+      font-size: clamp(1.5rem, 3vw, 2.0rem);
+      font-weight: 800;
+      color: var(--text-primary);
+      text-align: center;
+      letter-spacing: -0.025em;
+      line-height: 1.2;
+      margin-bottom: 10px;
+    }
+    .detect-subtext {
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+      text-align: center;
+      line-height: 1.6;
+      margin-bottom: 28px;
+    }
+
+    /* Model selector */
+    .model-row {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      margin-bottom: 14px;
+      gap: 10px;
+    }
+    .model-label {
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--text-dim);
+    }
+    .model-select {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      color: var(--text-primary);
+      font-family: inherit;
+      font-size: 0.84rem;
+      font-weight: 500;
+      padding: 7px 12px;
+      outline: none;
+      cursor: pointer;
+      transition: border-color 0.2s;
+    }
+    .model-select:focus { border-color: var(--border-focus); box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.14); }
+    .model-select option { background: var(--bg-secondary); color: #fff; }
+
+    /* Textarea */
+    .textarea-wrap { position: relative; margin-bottom: 6px; }
+    textarea.detect-input {
+      width: 100%;
+      min-height: 185px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 18px 20px;
+      color: var(--text-primary);
+      font-family: inherit;
+      font-size: 0.98rem;
+      line-height: 1.65;
+      resize: vertical;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      max-height: 400px;
+    }
+    textarea.detect-input::placeholder { color: var(--text-dim); }
+    textarea.detect-input:focus {
+      border-color: var(--border-focus);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.14);
+    }
+
+    /* Character counter */
+    .counter-row { display: flex; justify-content: flex-end; margin-bottom: 12px; }
+    .char-counter { font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-dim); }
+
+    /* URL input */
+    .url-wrap { position: relative; margin-bottom: 24px; }
+    .url-icon {
+      position: absolute;
+      left: 14px; top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-dim);
+      pointer-events: none;
+      display: flex;
+      align-items: center;
+    }
+    input.url-input {
+      width: 100%;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 11px 16px 11px 42px;
+      color: var(--text-primary);
+      font-family: inherit;
+      font-size: 0.94rem;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    input.url-input::placeholder { color: var(--text-dim); }
+    input.url-input:focus {
+      border-color: var(--border-focus);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.14);
+    }
+
+    /* Buttons row */
+    .detect-buttons-row {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      justify-content: flex-end;
+    }
+
+    /* Clear button */
+    .btn-clear {
+      font-family: inherit;
+      font-size: 0.9rem;
+      font-weight: 600;
+      padding: 11px 22px;
+      border-radius: 10px;
+      border: 1px solid var(--border-color);
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--text-secondary);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      transition: all 0.2s ease;
+    }
+    .btn-clear:hover {
+      border-color: var(--light-blue);
+      background: rgba(255, 255, 255, 0.07);
+      color: var(--text-primary);
+    }
+
+    /* Analyze button */
+    .btn-analyze {
+      font-family: inherit;
+      font-size: 0.95rem;
+      font-weight: 700;
+      padding: 11px 30px;
+      border-radius: 10px;
+      border: none;
+      background: #2D7DD2;
+      color: #FFFFFF;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 4px 16px rgba(45, 125, 210, 0.35);
+      transition: all 0.2s ease;
+      letter-spacing: -0.01em;
+    }
+    .btn-analyze:hover {
+      background: #2468B5;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 22px rgba(45, 125, 210, 0.50);
+    }
+    .btn-analyze:disabled { opacity: 0.55; cursor: not-allowed; transform: none; }
+
+    /* Error */
+    .detect-error {
+      display: none;
+      margin-top: 14px;
+      color: var(--error-red);
+      font-size: 0.88rem;
+      font-weight: 500;
+      padding: 10px 14px;
+      background: var(--error-bg);
+      border: 1px solid var(--error-border);
+      border-radius: 8px;
+    }
+
+    /* Scanner */
+    .scanner {
+      display: none;
+      margin-top: 24px;
+      padding: 32px 20px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      text-align: center;
+      animation: fadeIn 0.3s ease forwards;
+    }
+    .scanner-spinner {
+      width: 48px;
+      height: 48px;
+      margin: 0 auto 16px;
+      border-radius: 50%;
+      border: 3px solid rgba(59, 130, 246, 0.14);
+      border-top-color: var(--gradient-blue);
+      animation: spin 0.9s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .scanner-status { font-size: 0.95rem; font-weight: 600; color: var(--text-primary); margin-bottom: 5px; }
+    .scanner-sub { font-size: 0.82rem; color: var(--text-secondary); }
+    .scanner-progress {
+      max-width: 280px; height: 3px;
+      background: rgba(255, 255, 255, 0.06);
+      border-radius: 2px;
+      margin: 14px auto 0;
+      overflow: hidden;
+    }
+    .scanner-progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--primary-blue), var(--light-blue));
+      border-radius: 2px;
+      animation: progressAnim 1.6s ease-in-out infinite;
+    }
+    @keyframes progressAnim {
+      0%   { transform: translateX(-100%); width: 30%; }
+      50%  { width: 60%; }
+      100% { transform: translateX(350%); width: 30%; }
+    }
+
+    /* Results */
+    .results-container { display: none; margin-top: 28px; animation: fadeIn 0.4s ease forwards; }
+    .results-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 18px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .results-title { font-size: 1.2rem; font-weight: 800; color: var(--text-primary); letter-spacing: -0.02em; }
+    .results-badge {
+      font-size: 0.8rem; font-weight: 600; color: var(--text-secondary);
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      padding: 4px 12px; border-radius: 99px;
+    }
+    .results-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap: 18px; }
+
+    /* Result card */
+    .result-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      transition: all 0.25s ease;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    }
+    .result-card:hover { border-color: rgba(96, 165, 250, 0.35); transform: translateY(-2px); }
+    .result-card.primary-rank {
+      border-color: rgba(59, 130, 246, 0.45);
+      box-shadow: 0 8px 32px rgba(37, 99, 235, 0.14);
+    }
+    .card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 14px;
+    }
+    .card-name { font-size: 1.0rem; font-weight: 700; color: var(--text-primary); letter-spacing: -0.015em; }
+    .card-role { font-size: 0.78rem; color: var(--text-secondary); margin-top: 2px; }
+    .card-pill {
+      font-size: 0.7rem; padding: 3px 9px; border-radius: 99px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-color);
+      color: var(--light-blue); font-weight: 600; white-space: nowrap;
+    }
+    .verdict-banner {
+      border-radius: 10px;
+      padding: 13px 16px;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+    }
+    .verdict-status {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 1.02rem;
+      font-weight: 800;
+    }
+    .status-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+    .verdict-status.fake { color: var(--error-red); }
+    .verdict-status.fake .status-dot { background: var(--error-red); box-shadow: 0 0 10px var(--error-red); }
+    .verdict-status.real { color: var(--success-green); }
+    .verdict-status.real .status-dot { background: var(--success-green); box-shadow: 0 0 10px var(--success-green); }
+    .verdict-pct { font-family: var(--font-mono); font-size: 1.1rem; font-weight: 700; color: #FFFFFF; }
+
+    .meter-block { margin-bottom: 14px; }
+    .meter-header { display: flex; justify-content: space-between; font-size: 0.77rem; color: var(--text-secondary); margin-bottom: 5px; }
+    .meter-track { height: 6px; background: rgba(255, 255, 255, 0.06); border-radius: 99px; overflow: hidden; }
+    .meter-fill { height: 100%; border-radius: 99px; transition: width 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
+    .meter-fill.fake { background: linear-gradient(90deg, #F87171, #EF4444); box-shadow: 0 0 12px rgba(239, 68, 68, 0.4); }
+    .meter-fill.real { background: linear-gradient(90deg, #34D399, #10B981); box-shadow: 0 0 12px rgba(16, 185, 129, 0.4); }
+
+    .card-explanation { font-size: 0.85rem; color: var(--text-secondary); line-height: 1.55; margin-bottom: 16px; }
+
+    .btn-words {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      padding: 9px 13px;
+      color: var(--light-blue);
+      font-size: 0.83rem;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: all 0.2s ease;
+      margin-top: auto;
+    }
+    .btn-words:hover { background: rgba(59, 130, 246, 0.1); border-color: var(--light-blue); color: #FFFFFF; }
+
+    .words-drawer {
+      display: none;
+      margin-top: 12px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      padding: 14px;
+      animation: fadeIn 0.25s ease forwards;
+    }
+    .words-drawer.open { display: block; }
+    .words-section { margin-bottom: 12px; }
+    .words-section:last-child { margin-bottom: 0; }
+    .words-section-label { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 7px; }
+    .words-section-label.fake { color: var(--error-red); }
+    .words-section-label.real { color: var(--success-green); }
+    .chips-cluster { display: flex; flex-wrap: wrap; gap: 5px; }
+    .tag-chip { font-family: var(--font-mono); font-size: 0.75rem; padding: 3px 9px; border-radius: 6px; font-weight: 500; }
+    .tag-chip.fake { background: var(--error-bg); border: 1px solid var(--error-border); color: var(--error-red); }
+    .tag-chip.real { background: var(--success-bg); border: 1px solid var(--success-border); color: var(--success-green); }
+    .empty-token-msg { font-size: 0.8rem; color: var(--text-dim); font-style: italic; }
+
+    @media (max-width: 680px) {
+      .detect-card { padding: 28px 20px 24px; }
+      .detect-buttons-row { flex-direction: column; }
+      .btn-clear, .btn-analyze { width: 100%; justify-content: center; }
+      .results-grid { grid-template-columns: 1fr; }
+    }
+
+    /* ==========================================================================
+       HOW IT WORKS / BENCHMARKS / ABOUT — dark consistent
+       ========================================================================== */
+    .section-pane-wrap { padding-top: 48px; }
+
+    .section-eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      color: var(--light-blue);
+      letter-spacing: 0.08em;
+      margin-bottom: 8px;
+      font-weight: 600;
+    }
+    .section-headline {
+      font-size: clamp(1.55rem, 2.6vw, 2.1rem);
+      font-weight: 800;
+      letter-spacing: -0.025em;
+      margin-bottom: 10px;
+      color: var(--text-primary);
+    }
+    .section-subtext {
+      color: var(--text-secondary);
+      font-size: 0.94rem;
+      max-width: 680px;
+      line-height: 1.65;
+      margin-bottom: 36px;
+    }
+
+    /* Architecture Cards */
+    .architecture-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 24px;
+    }
+    .arch-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 30px;
+      display: flex;
+      flex-direction: column;
+      transition: all 0.3s ease;
+    }
+    .arch-box:hover { border-color: rgba(96, 165, 250, 0.4); transform: translateY(-2px); }
+    .arch-step-tag { font-family: var(--font-mono); font-size: 0.75rem; color: var(--light-blue); margin-bottom: 8px; font-weight: 600; }
+    .arch-title { font-size: 1.3rem; font-weight: 700; margin-bottom: 12px; color: var(--text-primary); letter-spacing: -0.02em; }
+    .arch-highlight {
+      background: rgba(18, 59, 122, 0.06);
+      border-left: 3px solid var(--primary-blue);
+      padding: 10px 14px;
+      border-radius: 4px;
+      font-size: 0.9rem;
+      color: #2D4A6F;
+      margin-bottom: 18px;
+      line-height: 1.5;
+    }
+    .arch-body { color: var(--text-secondary); font-size: 0.92rem; line-height: 1.6; margin-bottom: 24px; }
+    .arch-specs-table { width: 100%; border-collapse: collapse; font-size: 0.88rem; margin-top: auto; }
+    .arch-specs-table tr { border-bottom: 1px solid var(--border-color); }
+    .arch-specs-table tr:last-child { border-bottom: none; }
+    .arch-specs-table td { padding: 9px 0; }
+    .arch-specs-table td:first-child { color: var(--text-dim); }
+    .arch-specs-table td:last-child { text-align: right; font-weight: 600; color: var(--text-primary); }
+
+    /* Benchmark Table */
+    .benchmark-container {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      margin-bottom: 32px;
+    }
+    .metrics-table { width: 100%; border-collapse: collapse; font-size: 0.92rem; }
+    .metrics-table th {
+      background: var(--bg-secondary);
+      color: var(--text-secondary);
+      font-weight: 600;
+      text-align: left;
+      padding: 16px 20px;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      border-bottom: 1px solid var(--border-color);
+    }
+    .metrics-table td { padding: 18px 20px; border-bottom: 1px solid var(--border-color); color: var(--text-secondary); }
+    .metrics-table tr:last-child td { border-bottom: none; }
+    .metrics-table tr.best-rank { background: rgba(18, 59, 122, 0.06); }
+    .metrics-table .model-bold { font-weight: 700; color: #0B1D3A; }
+    .metrics-table .num-val { font-family: var(--font-mono); font-weight: 600; color: var(--text-secondary); }
+    .metrics-table .num-val.star { color: #2D7DD2; }
+
+    /* Glossary */
+    .glossary-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 26px;
+      margin-bottom: 36px;
+    }
+    .glossary-header { font-size: 1.0rem; font-weight: 700; margin-bottom: 14px; color: #2D7DD2; }
+    .glossary-items { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 18px; }
+    .glossary-item b { color: #0B1D3A; display: block; margin-bottom: 4px; font-size: 0.92rem; }
+    .glossary-item span { color: var(--text-secondary); font-size: 0.86rem; line-height: 1.45; display: block; }
+
+    /* Artifacts Grid */
+    .artifacts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 22px; }
+    .artifact-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      transition: all 0.25s ease;
+    }
+    .artifact-card:hover { border-color: rgba(96, 165, 250, 0.4); transform: translateY(-2px); }
+    .artifact-card img { width: 100%; height: auto; display: block; background: #FFFFFF; border-bottom: 1px solid var(--border-color); }
+    .artifact-body { padding: 18px 22px; }
+    .artifact-title { font-size: 0.98rem; font-weight: 700; margin-bottom: 4px; color: var(--text-primary); }
+    .artifact-sub { font-size: 0.84rem; color: var(--text-secondary); line-height: 1.45; }
+
+    /* About */
+    .about-cards-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; margin-bottom: 28px; }
+    .about-card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 30px; }
+    .about-card-title { font-size: 1.15rem; font-weight: 700; margin-bottom: 12px; color: var(--light-blue); display: flex; align-items: center; gap: 10px; }
+    .creator-names { display: flex; flex-direction: column; gap: 12px; margin-top: 14px; }
+    .creator-badge {
+      display: flex; align-items: center; gap: 12px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 12px 16px;
+    }
+    .creator-avatar {
+      width: 38px; height: 38px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary-blue), var(--gradient-blue));
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 800; font-size: 15px; color: #FFFFFF; flex-shrink: 0;
+    }
+    .creator-info b { display: block; font-size: 0.98rem; color: #FFFFFF; }
+    .creator-info span { display: block; font-size: 0.8rem; color: var(--text-secondary); }
+    .email-box {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      margin-top: 14px;
+      display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap;
+    }
+    .email-link { font-family: var(--font-mono); font-size: 0.92rem; color: var(--light-blue); text-decoration: none; word-break: break-all; }
+    .email-link:hover { text-decoration: underline; }
+
+    /* Primary button generic */
+    .btn {
+      font-family: inherit;
+      font-size: 0.95rem;
+      font-weight: 600;
+      padding: 10px 22px;
+      border-radius: 99px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border: none;
+      text-decoration: none;
+      transition: all 0.25s ease;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary-blue), var(--gradient-blue));
+      color: #0B1D3A;
+      box-shadow: 0 4px 18px var(--glow-blue);
+    }
+    .btn-primary:hover { box-shadow: 0 6px 24px rgba(59, 130, 246, 0.5); transform: translateY(-2px); }
+
+    /* ==========================================================================
+       Footer
+       ========================================================================== */
+    footer {
+      border-top: 1px solid var(--border-color);
+      padding: 32px 24px;
+      background: #EAEFF8;
+      position: relative;
+      z-index: 2;
+    }
+    .footer-inner {
+      max-width: 1380px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .footer-copy { color: var(--text-dim); font-size: 0.88rem; }
+    .footer-nav { display: flex; gap: 22px; }
+    .footer-nav a { color: var(--text-secondary); text-decoration: none; font-size: 0.86rem; cursor: pointer; }
+    .footer-nav a:hover { color: #FFFFFF; }
+
+    /* Edition pill */
+    .edition-pill {
+      position: fixed;
+      bottom: 24px;
+      right: 28px;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      background: rgba(18, 59, 122, 0.10);
+      border: 1px solid rgba(18, 59, 122, 0.25);
+      border-radius: 99px;
+      padding: 5px 14px;
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      color: #123B7A;
+      backdrop-filter: blur(10px);
+      z-index: 40;
+      pointer-events: none;
+    }
+    .edition-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: #123B7A;
+      box-shadow: 0 0 8px rgba(18, 59, 122, 0.4);
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Ambient lighting orbs -->
+  <div class="ambient-bg">
+    <div class="orb-1"></div>
+    <div class="orb-2"></div>
+  </div>
+
+  <!-- ============================================================
+       NAVIGATION — PYXON exact dark style
+       ============================================================ -->
+  <header>
+    <div class="nav-container">
+      <div class="logo-group" onclick="switchTab('home')">
+        <span class="logo-text">NewsX</span>
+      </div>
+
+      <nav class="nav-tabs">
+        <button class="tab-btn active" data-tab="home">Home</button>
+        <button class="tab-btn" data-tab="detect">Detect News</button>
+        <button class="tab-btn" data-tab="how-it-works">How It Works</button>
+        <button class="tab-btn" data-tab="benchmarks">Benchmarks</button>
+        <button class="tab-btn" data-tab="about">About</button>
+      </nav>
+
+      <div>
+        <button class="btn-nav-contact" onclick="openContact()">Contact Us</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- ============================================================
+         PANE 1: HOME — PYXON Two-Column Hero with Glowing Eye
+         ============================================================ -->
+    <section id="pane-home" class="tab-pane active">
+      <div class="hero-two-column-wrapper">
+
+        <!-- LEFT COLUMN -->
+        <div class="hero-col-left">
+          <div class="hero-eyebrow anim-reveal-1">
+            <span class="eyebrow-symbol">@</span>
+            <span>NEWSX · AI-POWERED NEWS VERIFICATION</span>
+          </div>
+
+          <h1 class="hero-title anim-reveal-2">
+            Don't Believe<br>
+            Everything.<br>
+            Know What's <span class="gradient-text">Real.</span>
+          </h1>
+
+          <p class="hero-description anim-reveal-3">
+            NewsX is an AI-powered fake news detection platform that analyzes news content, identifies misleading information, and helps users distinguish credible information from potentially false news.
+          </p>
+
+          <div class="hero-buttons-row anim-reveal-4">
+            <button class="btn-primary-action" onclick="switchTab('detect')">
+              <span>Analyze News</span>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- RIGHT COLUMN: Glowing Blue Eye (PYXON exact) -->
+        <div class="hero-col-right anim-reveal-2">
+          <div class="eye-illustration-container">
+            <div class="eye-ambient-glow"></div>
+
+            <!-- PYXON-style glowing eye SVG -->
+            <svg class="newsx-eye-svg" viewBox="0 0 500 500" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <!-- Outer glow gradient -->
+                <radialGradient id="outerGlow" cx="50%" cy="50%" r="50%">
+                  <stop offset="0%"  stop-color="#0F2D6B" stop-opacity="0.5"/>
+                  <stop offset="55%" stop-color="#091B3E" stop-opacity="0.18"/>
+                  <stop offset="100%" stop-color="#030914" stop-opacity="0"/>
+                </radialGradient>
+                <!-- Iris gradient -->
+                <radialGradient id="irisGrad" cx="40%" cy="38%" r="60%">
+                  <stop offset="0%"  stop-color="#1D5FAD"/>
+                  <stop offset="40%" stop-color="#123B7A"/>
+                  <stop offset="100%" stop-color="#061020"/>
+                </radialGradient>
+                <!-- Pupil gradient -->
+                <radialGradient id="pupilGrad" cx="40%" cy="38%" r="60%">
+                  <stop offset="0%"  stop-color="#1a2744"/>
+                  <stop offset="100%" stop-color="#030914"/>
+                </radialGradient>
+                <!-- Corneal ring gradient -->
+                <radialGradient id="cornealGrad" cx="50%" cy="50%" r="50%">
+                  <stop offset="70%" stop-color="transparent"/>
+                  <stop offset="88%" stop-color="#123B7A" stop-opacity="0.5"/>
+                  <stop offset="100%" stop-color="#1D5FAD" stop-opacity="0.9"/>
+                </radialGradient>
+                <!-- Outer ring gradient -->
+                <radialGradient id="outerRingGrad" cx="50%" cy="50%" r="50%">
+                  <stop offset="80%" stop-color="transparent"/>
+                  <stop offset="92%" stop-color="#091B3E" stop-opacity="0.35"/>
+                  <stop offset="100%" stop-color="#1D5FAD" stop-opacity="0.6"/>
+                </radialGradient>
+                <!-- Specular highlight -->
+                <radialGradient id="specular" cx="35%" cy="30%" r="45%">
+                  <stop offset="0%"  stop-color="#FFFFFF" stop-opacity="0.5"/>
+                  <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0"/>
+                </radialGradient>
+
+                <filter id="blurGlow" x="-30%" y="-30%" width="160%" height="160%">
+                  <feGaussianBlur stdDeviation="6" result="blur"/>
+                  <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+                </filter>
+                <filter id="softGlow" x="-20%" y="-20%" width="140%" height="140%">
+                  <feGaussianBlur stdDeviation="3"/>
+                </filter>
+              </defs>
+
+              <!-- Background ambient disc -->
+              <circle cx="250" cy="250" r="220" fill="url(#outerGlow)"/>
+
+              <!-- Outer structural ring group (slow spin) -->
+              <g class="eye-orbit-group">
+                <!-- Dashed orbit ring -->
+                <circle cx="250" cy="250" r="195" stroke="#091B3E" stroke-width="1" stroke-dasharray="6 10" stroke-opacity="0.6"/>
+                <!-- Small orbit nodes -->
+                <circle cx="250" cy="55"  r="4" fill="#1D5FAD" opacity="0.9"/>
+                <circle cx="445" cy="250" r="3" fill="#2D7DD2" opacity="0.6"/>
+                <circle cx="250" cy="445" r="4" fill="#123B7A" opacity="0.7"/>
+                <circle cx="55"  cy="250" r="3" fill="#2D7DD2" opacity="0.5"/>
+                <!-- Tick marks -->
+                <line x1="250" y1="58" x2="250" y2="72" stroke="#1D5FAD" stroke-width="1.5" stroke-linecap="round" opacity="0.7"/>
+                <line x1="442" y1="250" x2="428" y2="250" stroke="#1D5FAD" stroke-width="1.5" stroke-linecap="round" opacity="0.5"/>
+              </g>
+
+              <!-- Secondary orbit ring -->
+              <circle cx="250" cy="250" r="168" stroke="#091B3E" stroke-width="1" stroke-dasharray="3 14" stroke-opacity="0.4"/>
+
+              <!-- Corneal ring glow (static) -->
+              <circle cx="250" cy="250" r="148" fill="url(#cornealGrad)"/>
+
+              <!-- Iris breathing group -->
+              <g class="eye-iris-group">
+                <!-- Main iris disc -->
+                <circle cx="250" cy="250" r="130" fill="url(#irisGrad)" filter="url(#blurGlow)"/>
+
+                <!-- Iris texture rings -->
+                <circle cx="250" cy="250" r="128" stroke="#2D7DD2" stroke-width="1.5" stroke-opacity="0.35" fill="none"/>
+                <circle cx="250" cy="250" r="112" stroke="#1D5FAD" stroke-width="1"   stroke-opacity="0.25" fill="none"/>
+                <circle cx="250" cy="250" r="95"  stroke="#123B7A" stroke-width="0.8" stroke-opacity="0.20" fill="none"/>
+
+                <!-- Iris detail rays -->
+                <g opacity="0.20" stroke="#7DB4E8" stroke-width="0.8">
+                  <line x1="250" y1="122" x2="250" y2="378"/>
+                  <line x1="122" y1="250" x2="378" y2="250"/>
+                  <line x1="157" y1="157" x2="343" y2="343"/>
+                  <line x1="343" y1="157" x2="157" y2="343"/>
+                  <line x1="195" y1="122" x2="305" y2="378"/>
+                  <line x1="122" y1="195" x2="378" y2="305"/>
+                  <line x1="305" y1="122" x2="195" y2="378"/>
+                  <line x1="122" y1="305" x2="378" y2="195"/>
+                </g>
+
+                <!-- Pupil -->
+                <circle cx="250" cy="250" r="62" fill="url(#pupilGrad)"/>
+                <!-- Pupil inner ring -->
+                <circle cx="250" cy="250" r="60" stroke="#1E3A8A" stroke-width="2" stroke-opacity="0.7" fill="none"/>
+
+                <!-- Specular highlight on iris -->
+                <ellipse cx="225" cy="210" rx="38" ry="26" fill="url(#specular)"/>
+
+                <!-- Small catchlight on pupil -->
+                <circle cx="232" cy="230" r="10" fill="#FFFFFF" opacity="0.18"/>
+                <circle cx="264" cy="262" r="5" fill="#FFFFFF" opacity="0.10"/>
+              </g>
+
+              <!-- Floating particles -->
+              <g class="eye-particles">
+                <circle cx="310" cy="128" r="2.5" fill="#2D7DD2" opacity="0.75"/>
+                <circle cx="175" cy="140" r="2"   fill="#1D5FAD" opacity="0.60"/>
+                <circle cx="390" cy="195" r="1.8" fill="#7DB4E8" opacity="0.55"/>
+                <circle cx="118" cy="300" r="2.2" fill="#2D7DD2" opacity="0.65"/>
+                <circle cx="380" cy="340" r="2"   fill="#123B7A" opacity="0.50"/>
+                <circle cx="150" cy="380" r="2.5" fill="#1D5FAD" opacity="0.60"/>
+                <circle cx="340" cy="400" r="1.5" fill="#7DB4E8" opacity="0.45"/>
+                <circle cx="78"  cy="210" r="2"   fill="#2D7DD2" opacity="0.55"/>
+                <circle cx="425" cy="130" r="1.8" fill="#123B7A" opacity="0.40"/>
+              </g>
+
+              <!-- Outer subtle ring -->
+              <circle cx="250" cy="250" r="220" fill="url(#outerRingGrad)"/>
+            </svg>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- ============================================================
+         PANE 2: DETECT NEWS — Dark card, centered
+         ============================================================ -->
+    <section id="pane-detect" class="tab-pane">
+      <div class="detect-wrapper">
+
+        <!-- Back button -->
+        <button class="back-btn" onclick="switchTab('home')">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+          <span>Back to Home</span>
+        </button>
+
+        <!-- Main detection card -->
+        <div class="detect-card">
+
+          <!-- Icon -->
+          <div class="detect-top-icon">
+            <svg viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="6" y="8" width="32" height="36" rx="3" stroke="currentColor" stroke-width="2.5"/>
+              <rect x="12" y="14" width="14" height="10" rx="1.5" stroke="currentColor" stroke-width="2.2"/>
+              <line x1="30" y1="15" x2="36" y2="15" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+              <line x1="30" y1="20" x2="36" y2="20" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+              <line x1="30" y1="25" x2="36" y2="25" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+              <line x1="12" y1="30" x2="36" y2="30" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+              <line x1="12" y1="35" x2="36" y2="35" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+              <line x1="12" y1="25" x2="24" y2="25" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+              <circle cx="40" cy="40" r="5" stroke="currentColor" stroke-width="2.2"/>
+              <line x1="44" y1="44" x2="47" y2="47" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+            </svg>
+          </div>
+
+          <h1 class="detect-heading">Check the authenticity of news.</h1>
+          <p class="detect-subtext">Paste a news headline, article or text to analyze its credibility.</p>
+
+          <!-- Model selector -->
+          <div class="model-row">
+            <span class="model-label">Model:</span>
+            <select id="engine-select" class="model-select">
+              <option value="all">Compare All 3 Models (Recommended)</option>
+              <option value="bert">DistilBERT — Most Accurate</option>
+              <option value="bilstm">BiLSTM — Deep Learning</option>
+              <option value="tfidf">TF-IDF — Fast Baseline</option>
+            </select>
+          </div>
+
+          <!-- Textarea -->
+          <div class="textarea-wrap">
+            <textarea id="article-input" class="detect-input" maxlength="5000"
+              placeholder="Paste your news article or headline here..."></textarea>
+          </div>
+
+          <!-- Character counter -->
+          <div class="counter-row">
+            <span class="char-counter" id="char-counter">0 / 5000</span>
+          </div>
+
+          <!-- URL input -->
+          <div class="url-wrap">
+            <span class="url-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+                <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+              </svg>
+            </span>
+            <input type="url" id="url-input" class="url-input" placeholder="Enter news URL (optional)">
+          </div>
+
+          <!-- Error -->
+          <div class="detect-error" id="error-message"></div>
+
+          <!-- Buttons -->
+          <div class="detect-buttons-row">
+            <button class="btn-clear" id="btn-clear">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/>
+              </svg>
+              Clear
+            </button>
+            <button class="btn-analyze" id="btn-analyze">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M5 12h14M12 5l7 7-7 7"/>
+              </svg>
+              Analyze News
+            </button>
+          </div>
+
+          <!-- Scanner / Loading -->
+          <div class="scanner" id="scanner-container">
+            <div class="scanner-spinner"></div>
+            <div class="scanner-status" id="scanner-status-text">Scanning News Content...</div>
+            <div class="scanner-sub" id="scanner-substatus-text">Analyzing linguistic style, contextual flow, and credibility signals</div>
+            <div class="scanner-progress"><div class="scanner-progress-fill"></div></div>
+          </div>
+
+          <!-- Results -->
+          <div class="results-container" id="results-container">
+            <div class="results-header">
+              <h2 class="results-title">Verification Analysis</h2>
+              <span class="results-badge" id="consensus-badge">3 Models Evaluated</span>
+            </div>
+            <div class="results-grid" id="results-target"></div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ============================================================
+         PANE 3: HOW IT WORKS
+         ============================================================ -->
+    <section id="pane-how-it-works" class="tab-pane">
+      <div class="section-pane-wrap">
+        <div class="section-eyebrow">Artificial Intelligence Architecture</div>
+        <h2 class="section-headline">How the Models Detect Misinformation</h2>
+        <p class="section-subtext">
+          Our platform compares three distinct machine learning approaches trained on 45,000 verified news articles from the benchmark ISOT dataset.
+        </p>
+
+        <div class="architecture-cards">
+          <div class="arch-box">
+            <div class="arch-step-tag">APPROACH 01</div>
+            <h3 class="arch-title">Keyword Counting Model</h3>
+            <div class="arch-highlight">
+              <b>In Simple Terms:</b> Like a fast vocabulary scanner. It checks how often sensational buzzwords appear compared to formal news vocabulary.
+            </div>
+            <p class="arch-body">
+              Uses TF-IDF (Term Frequency-Inverse Document Frequency) and Logistic Regression to weight 50,000 words and word pairs based on their statistical association with misleading vs. authentic articles.
+            </p>
+            <table class="arch-specs-table">
+              <tr><td>Architecture</td><td>TF-IDF + Logistic Regression</td></tr>
+              <tr><td>Feature Vocabulary</td><td>50,000 N-Grams</td></tr>
+              <tr><td>Inference Latency</td><td>&lt; 2 milliseconds</td></tr>
+              <tr><td>Key Advantage</td><td>Fast and transparent</td></tr>
+            </table>
+          </div>
+
+          <div class="arch-box">
+            <div class="arch-step-tag">APPROACH 02</div>
+            <h3 class="arch-title">Deep Learning (BiLSTM)</h3>
+            <div class="arch-highlight">
+              <b>In Simple Terms:</b> Like a reader who reads each sentence forwards and backwards to check grammar flow and suspicious phrasing.
+            </div>
+            <p class="arch-body">
+              A Bidirectional Long Short-Term Memory (BiLSTM) neural network that processes word sequences over time. Its learned self-attention layer assigns numerical weights to the exact words that shaped its verdict.
+            </p>
+            <table class="arch-specs-table">
+              <tr><td>Architecture</td><td>Bidirectional LSTM with Attention</td></tr>
+              <tr><td>Word Embedding</td><td>128 Dimensions</td></tr>
+              <tr><td>Recurrent Layers</td><td>2 Bidirectional Layers</td></tr>
+              <tr><td>Key Advantage</td><td>Captures sequence order and word flow</td></tr>
+            </table>
+          </div>
+
+          <div class="arch-box">
+            <div class="arch-step-tag">APPROACH 03</div>
+            <h3 class="arch-title">Advanced AI (DistilBERT)</h3>
+            <div class="arch-highlight">
+              <b>In Simple Terms:</b> Like an experienced editor who understands the entire paragraph in context, recognizing irony, tone, and credibility.
+            </div>
+            <p class="arch-body">
+              A state-of-the-art contextual transformer model fine-tuned specifically for news classification. It achieves over 99.9% accuracy by evaluating deep linguistic nuances that simpler models miss.
+            </p>
+            <table class="arch-specs-table">
+              <tr><td>Architecture</td><td>DistilBERT Transformer</td></tr>
+              <tr><td>Parameters</td><td>66 Million Parameters</td></tr>
+              <tr><td>Attention Heads</td><td>12 Multi-Head Blocks</td></tr>
+              <tr><td>Key Advantage</td><td>Highest accuracy, catches subtle fake news</td></tr>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ============================================================
+         PANE 4: BENCHMARKS
+         ============================================================ -->
+    <section id="pane-benchmarks" class="tab-pane">
+      <div class="section-pane-wrap">
+        <div class="section-eyebrow">Proven Test Results</div>
+        <h2 class="section-headline">Empirical Test Benchmarks</h2>
+        <p class="section-subtext">
+          All models were evaluated on 2,400 unseen test articles from the ISOT dataset (stratified 70/15/15 split). Source tags were stripped to prevent data leakage.
+        </p>
+
+        <div class="benchmark-container">
+          <table class="metrics-table">
+            <thead>
+              <tr>
+                <th>Model Architecture</th>
+                <th>Type</th>
+                <th>Accuracy</th>
+                <th>Precision</th>
+                <th>Recall</th>
+                <th>Overall F1-Score</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="best-rank">
+                <td><span class="model-bold">Advanced AI (DistilBERT)</span></td>
+                <td>Contextual Transformer</td>
+                <td class="num-val star">99.9%</td>
+                <td class="num-val">99.8%</td>
+                <td class="num-val">100.0%</td>
+                <td class="num-val star">0.999</td>
+              </tr>
+              <tr>
+                <td><span class="model-bold">Keyword Model (TF-IDF)</span></td>
+                <td>Statistical N-Gram Baseline</td>
+                <td class="num-val">98.3%</td>
+                <td class="num-val">99.0%</td>
+                <td class="num-val">97.2%</td>
+                <td class="num-val">0.981</td>
+              </tr>
+              <tr>
+                <td><span class="model-bold">Deep Learning (BiLSTM)</span></td>
+                <td>Word Sequence Network</td>
+                <td class="num-val">97.2%</td>
+                <td class="num-val">97.5%</td>
+                <td class="num-val">96.3%</td>
+                <td class="num-val">0.969</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="glossary-card">
+          <div class="glossary-header">Understanding The Metrics in Plain English</div>
+          <div class="glossary-items">
+            <div class="glossary-item">
+              <b>Accuracy</b>
+              <span>The overall percentage of articles the model got right out of 100 test samples.</span>
+            </div>
+            <div class="glossary-item">
+              <b>Precision</b>
+              <span>When the model flags an article as fake, how often it is truly fake (preventing false alarms).</span>
+            </div>
+            <div class="glossary-item">
+              <b>Recall</b>
+              <span>Out of all the fake news articles out there, how many did the model successfully catch.</span>
+            </div>
+            <div class="glossary-item">
+              <b>F1-Score</b>
+              <span>The overall quality score balancing both precision and recall (1.0 is a perfect score).</span>
+            </div>
+          </div>
+        </div>
+
+        <h3 style="font-size:1.3rem; font-weight:700; margin-bottom:20px; color: var(--text-primary); letter-spacing:-0.02em;">Evaluation Graphs &amp; Confusion Matrices</h3>
+        <div class="artifacts-grid">
+          <div class="artifact-card">
+            <img src="img/roc_curves.png" alt="ROC Curves">
+            <div class="artifact-body">
+              <div class="artifact-title">ROC Comparison Curves</div>
+              <div class="artifact-sub">Demonstrates separation between real and fake distributions across all confidence thresholds.</div>
+            </div>
+          </div>
+          <div class="artifact-card">
+            <img src="img/cm_BERT.png" alt="DistilBERT Confusion Matrix">
+            <div class="artifact-body">
+              <div class="artifact-title">DistilBERT Confusion Matrix</div>
+              <div class="artifact-sub">Ground-truth vs. predicted labels showing zero false negatives on the test set.</div>
+            </div>
+          </div>
+          <div class="artifact-card">
+            <img src="img/cm_BiLSTM_Attn.png" alt="BiLSTM Confusion Matrix">
+            <div class="artifact-body">
+              <div class="artifact-title">BiLSTM Confusion Matrix</div>
+              <div class="artifact-sub">Performance breakdown of the recurrent sequence neural network.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ============================================================
+         PANE 5: ABOUT
+         ============================================================ -->
+    <section id="pane-about" class="tab-pane">
+      <div class="section-pane-wrap">
+        <div class="section-eyebrow">Project Context &amp; Authors</div>
+        <h2 class="section-headline">About This Project</h2>
+        <p class="section-subtext">
+          An end-to-end Machine Learning and Natural Language Processing project designed to evaluate information verification across multiple AI model architectures.
+        </p>
+
+        <div class="about-cards-grid">
+          <div class="about-card">
+            <div class="about-card-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+              <span>Project Creators</span>
+            </div>
+            <p style="color:var(--text-secondary); font-size:0.9rem; line-height:1.5;">This project was designed, developed, and evaluated by:</p>
+            <div class="creator-names">
+              <div class="creator-badge">
+                <div class="creator-avatar">NY</div>
+                <div class="creator-info">
+                  <b>Nitesh Yadav</b>
+                  <span>Lead Developer &amp; ML Researcher</span>
+                </div>
+              </div>
+              <div class="creator-badge">
+                <div class="creator-avatar">AA</div>
+                <div class="creator-info">
+                  <b>Abhinav Agarwal</b>
+                  <span>Co-Developer &amp; Systems Researcher</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="about-card">
+            <div class="about-card-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+              <span>Questions &amp; Inquiries</span>
+            </div>
+            <p style="color:var(--text-secondary); font-size:0.9rem; line-height:1.5;">Have questions about the dataset, model architectures, or code implementation? Reach out via email:</p>
+            <div class="email-box">
+              <a href="mailto:itsniteshyadav.dev@gmail.com" class="email-link">itsniteshyadav.dev@gmail.com</a>
+              <a href="mailto:itsniteshyadav.dev@gmail.com" class="btn btn-primary" style="padding:7px 16px; font-size:0.82rem;">Send Email</a>
+            </div>
+            <p style="font-size:0.8rem; color:var(--text-dim); margin-top:12px;">Open for academic inquiries, feedback, and collaboration.</p>
+          </div>
+        </div>
+
+        <div style="background:var(--bg-card); border:1px solid var(--border-color); border-radius:var(--radius-lg); padding:30px;">
+          <h3 style="font-size:1.15rem; font-weight:700; margin-bottom:12px; color:var(--text-primary); letter-spacing:-0.02em;">Dataset &amp; Rigorous Preprocessing</h3>
+          <p style="color:var(--text-secondary); line-height:1.7; margin-bottom:16px; font-size:0.94rem;">
+            The system was trained on the <b style="color:var(--text-primary);">ISOT Fake News Dataset</b> provided by the University of Victoria Information Security and Object Technology research group, consisting of over 44,000 real and fake news articles.
+          </p>
+          <p style="color:var(--text-secondary); line-height:1.7; font-size:0.94rem;">
+            To ensure fair and rigorous evaluation, articles were preprocessed to remove publisher tags (e.g. "Reuters"), eliminating data leakage so models learn semantic style and rhetorical tone rather than metadata shortcuts.
+          </p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-copy">NewsX // See Beyond the Headlines — Developed by Nitesh Yadav &amp; Abhinav Agarwal</div>
+      <div class="footer-nav">
+        <a onclick="switchTab('home')">Home</a>
+        <a onclick="switchTab('detect')">Detect News</a>
+        <a onclick="switchTab('how-it-works')">How It Works</a>
+        <a onclick="switchTab('benchmarks')">Benchmarks</a>
+        <a onclick="switchTab('about')">About</a>
+      </div>
+    </div>
+  </footer>
+
+  <div class="edition-pill"><span class="edition-dot"></span><span>AI VERIFICATION ENGINE</span></div>
+
+  <script>
+    // Tab Switching
+    const tabs = document.querySelectorAll('.tab-btn');
+    const panes = document.querySelectorAll('.tab-pane');
+
+    function replayHomeAnimations() {
+      const leftCol = document.querySelector('.hero-col-left');
+      const rightCol = document.querySelector('.hero-col-right');
+      if (leftCol) {
+        leftCol.querySelectorAll('[class*="anim-reveal-"]').forEach(el => {
+          el.style.animation = 'none';
+          el.offsetHeight;
+          el.style.animation = '';
+        });
+      }
+      if (rightCol) {
+        rightCol.style.animation = 'none';
+        rightCol.offsetHeight;
+        rightCol.style.animation = '';
+      }
+    }
+
+    function openContact() {
+      switchTab('about');
+      setTimeout(() => {
+        const c = document.querySelector('.about-card:nth-child(2)');
+        if (c) c.scrollIntoView({ behavior: 'smooth' });
+      }, 120);
+    }
+
+    function switchTab(targetTab) {
+      tabs.forEach(t => {
+        if (t.dataset.tab === targetTab) t.classList.add('active');
+        else t.classList.remove('active');
+      });
+      panes.forEach(p => {
+        if (p.id === 'pane-' + targetTab) {
+          p.classList.add('active');
+          if (targetTab === 'home') replayHomeAnimations();
+        } else {
+          p.classList.remove('active');
+        }
+      });
+      window.location.hash = targetTab;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      if (targetTab === 'detect') {
+        setTimeout(() => { const a = document.getElementById('article-input'); if (a) a.focus(); }, 150);
+      }
+    }
+
+    tabs.forEach(tab => { tab.addEventListener('click', () => switchTab(tab.dataset.tab)); });
+
+    if (window.location.hash) {
+      const init = window.location.hash.replace('#', '');
+      if (['home','detect','how-it-works','benchmarks','about'].includes(init)) switchTab(init);
+    }
+
+    // Detect page logic
+    const SAMPLES = {
+      fake: "SHOCKING video shows corrupt politicians caught in a secret conspiracy the mainstream media is actively covering up! Watch this explosive footage before government censors force it to be deleted! Share this with everyone immediately because no one in Washington wants this exposed!",
+      real: "Federal financial regulators announced on Wednesday that they will publish the updated quarterly monetary policy guidelines next week. Committee officials indicated that discussions will resume on Thursday morning ahead of a scheduled floor vote on Friday."
+    };
+
+    const input = document.getElementById('article-input');
+    const counter = document.getElementById('char-counter');
+    const btnClear = document.getElementById('btn-clear');
+    const btnAnalyze = document.getElementById('btn-analyze');
+    const engineSelect = document.getElementById('engine-select');
+    const errMsg = document.getElementById('error-message');
+    const scanner = document.getElementById('scanner-container');
+    const resultsContainer = document.getElementById('results-container');
+    const resultsTarget = document.getElementById('results-target');
+
+    function updateCounter() {
+      counter.textContent = `${input.value.length} / 5000`;
+    }
+    input.addEventListener('input', updateCounter);
+
+    btnClear.onclick = () => {
+      input.value = '';
+      const u = document.getElementById('url-input');
+      if (u) u.value = '';
+      updateCounter();
+      resultsContainer.style.display = 'none';
+      errMsg.style.display = 'none';
+    };
+
+    const scanStages = [
+      "Tokenizing and normalizing text...",
+      "Extracting contextual representations...",
+      "Evaluating linguistic credibility signals...",
+      "Synthesizing model predictions..."
+    ];
+
+    btnAnalyze.onclick = async () => {
+      const text = input.value.trim();
+      const model = engineSelect.value;
+      errMsg.style.display = 'none';
+
+      if (text.split(/\s+/).filter(Boolean).length < 5) {
+        errMsg.textContent = "Please enter at least 5 to 10 words of article text to analyze.";
+        errMsg.style.display = 'block';
+        return;
+      }
+
+      btnAnalyze.disabled = true;
+      scanner.style.display = 'block';
+      resultsContainer.style.display = 'none';
+
+      let stageIdx = 0;
+      const statusText = document.getElementById('scanner-status-text');
+      const stageInterval = setInterval(() => {
+        stageIdx = (stageIdx + 1) % scanStages.length;
+        if (statusText) statusText.textContent = scanStages[stageIdx];
+      }, 400);
+
+      try {
+        const res = await fetch("/api/analyze", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ text, model })
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || "Analysis failed.");
+        clearInterval(stageInterval);
+        scanner.style.display = 'none';
+        renderResults(data.results);
+      } catch (err) {
+        clearInterval(stageInterval);
+        scanner.style.display = 'none';
+        errMsg.textContent = err.message;
+        errMsg.style.display = 'block';
+      } finally {
+        btnAnalyze.disabled = false;
+      }
+    };
+
+    function renderResults(results) {
+      resultsTarget.innerHTML = "";
+
+      function buildWordsDrawer(id, fakeWords, realWords) {
+        const fw = (fakeWords || []).map(w => `<span class="tag-chip fake">${w}</span>`).join("");
+        const rw = (realWords || []).map(w => `<span class="tag-chip real">${w}</span>`).join("");
+        return `
+          <button class="btn-words" onclick="toggleWords('${id}')" id="btn-toggle-${id}">
+            <span>View Words Influencing This Result</span>
+            <span id="arrow-${id}">▼</span>
+          </button>
+          <div class="words-drawer" id="drawer-${id}">
+            <div class="words-section">
+              <div class="words-section-label fake">Words Signaling Fake News</div>
+              <div class="chips-cluster">${fw || '<span class="empty-token-msg">No suspicious buzzwords found.</span>'}</div>
+            </div>
+            <div class="words-section">
+              <div class="words-section-label real">Words Signaling Real News</div>
+              <div class="chips-cluster">${rw || '<span class="empty-token-msg">No typical formal news terms found.</span>'}</div>
+            </div>
+          </div>
+        `;
+      }
+
+      if (results.bert && !results.bert.error) {
+        const b = results.bert;
+        const isFake = b.label === "FAKE";
+        const pct = (b.confidence * 100).toFixed(1);
+        resultsTarget.innerHTML += `
+          <div class="result-card primary-rank">
+            <div class="card-top">
+              <div>
+                <div class="card-name">Advanced AI (DistilBERT)</div>
+                <div class="card-role">Deep Contextual Transformer</div>
+              </div>
+              <span class="card-pill">99.9% Accurate</span>
+            </div>
+            <div class="verdict-banner">
+              <div class="verdict-status ${isFake ? 'fake' : 'real'}">
+                <span class="status-dot"></span>
+                ${isFake ? 'Likely Fake News' : 'Likely Genuine News'}
+              </div>
+              <div class="verdict-pct">${pct}%</div>
+            </div>
+            <div class="meter-block">
+              <div class="meter-header">
+                <span>Certainty Score</span>
+                <span>${pct}% confident in ${isFake ? 'Fake' : 'Real'}</span>
+              </div>
+              <div class="meter-track">
+                <div class="meter-fill ${isFake ? 'fake' : 'real'}" style="width:${pct}%"></div>
+              </div>
+            </div>
+            <p class="card-explanation">
+              ${isFake ? 'Detected sensationalist tone, dramatic framing, or vocabulary patterns frequent in misinformation headlines.' : 'Identified neutral journalistic tone, structured attribution, and wording typical of verified news reporting.'}
+            </p>
+            ${buildWordsDrawer('bert', b.words_making_fake, b.words_making_real)}
+          </div>
+        `;
+      }
+
+      if (results.bilstm && !results.bilstm.error) {
+        const l = results.bilstm;
+        const isFake = l.label === "FAKE";
+        const pct = (l.confidence * 100).toFixed(1);
+        resultsTarget.innerHTML += `
+          <div class="result-card">
+            <div class="card-top">
+              <div>
+                <div class="card-name">Sequence Model (BiLSTM)</div>
+                <div class="card-role">Neural Word-by-Word Sequence Reader</div>
+              </div>
+              <span class="card-pill">97.2% Accurate</span>
+            </div>
+            <div class="verdict-banner">
+              <div class="verdict-status ${isFake ? 'fake' : 'real'}">
+                <span class="status-dot"></span>
+                ${isFake ? 'Likely Fake News' : 'Likely Genuine News'}
+              </div>
+              <div class="verdict-pct">${pct}%</div>
+            </div>
+            <div class="meter-block">
+              <div class="meter-header">
+                <span>Certainty Score</span>
+                <span>${pct}% confident in ${isFake ? 'Fake' : 'Real'}</span>
+              </div>
+              <div class="meter-track">
+                <div class="meter-fill ${isFake ? 'fake' : 'real'}" style="width:${pct}%"></div>
+              </div>
+            </div>
+            <p class="card-explanation">
+              ${isFake ? 'Sequence flow and word relationships strongly matched misleading story structures.' : 'Sequential sentence progression was consistent with structured, verified news writing.'}
+            </p>
+            ${buildWordsDrawer('bilstm', l.words_making_fake, l.words_making_real)}
+          </div>
+        `;
+      }
+
+      if (results.tfidf && !results.tfidf.error) {
+        const t = results.tfidf;
+        const isFake = t.label === "FAKE";
+        const pct = (t.confidence * 100).toFixed(1);
+        resultsTarget.innerHTML += `
+          <div class="result-card">
+            <div class="card-top">
+              <div>
+                <div class="card-name">Keyword Model (TF-IDF)</div>
+                <div class="card-role">Statistical Word-Matching Baseline</div>
+              </div>
+              <span class="card-pill">98.3% Accurate</span>
+            </div>
+            <div class="verdict-banner">
+              <div class="verdict-status ${isFake ? 'fake' : 'real'}">
+                <span class="status-dot"></span>
+                ${isFake ? 'Likely Fake News' : 'Likely Genuine News'}
+              </div>
+              <div class="verdict-pct">${pct}%</div>
+            </div>
+            <div class="meter-block">
+              <div class="meter-header">
+                <span>Certainty Score</span>
+                <span>${pct}% confident in ${isFake ? 'Fake' : 'Real'}</span>
+              </div>
+              <div class="meter-track">
+                <div class="meter-fill ${isFake ? 'fake' : 'real'}" style="width:${pct}%"></div>
+              </div>
+            </div>
+            <p class="card-explanation">
+              ${isFake ? 'Contains individual words statistically associated with fabricated or clickbait news.' : 'Contains terms strongly associated with legitimate wire reports and verified coverage.'}
+            </p>
+            ${buildWordsDrawer('tfidf', t.words_making_fake, t.words_making_real)}
+          </div>
+        `;
+      }
+
+      resultsContainer.style.display = 'block';
+      resultsContainer.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    window.toggleWords = function(id) {
+      const drawer = document.getElementById('drawer-' + id);
+      const arrow  = document.getElementById('arrow-' + id);
+      const btn    = document.getElementById('btn-toggle-' + id);
+      if (!drawer) return;
+      const isOpen = drawer.classList.contains('open');
+      if (isOpen) {
+        drawer.classList.remove('open');
+        btn.querySelector('span:first-child').textContent = 'View Words Influencing This Result';
+        arrow.textContent = '▼';
+      } else {
+        drawer.classList.add('open');
+        btn.querySelector('span:first-child').textContent = 'Hide Words';
+        arrow.textContent = '▲';
+      }
+    };
+  </script>
+
+</body>
+</html>
